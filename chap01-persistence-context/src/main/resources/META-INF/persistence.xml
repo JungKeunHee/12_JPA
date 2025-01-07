@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.1">
+    <persistence-unit name="jpatest">
+        <class>com.ohgiraffers.section02.crud.Menu</class>
+        <class>com.ohgiraffers.section03.entity.Menu</class>
+        <properties>
+            <!-- comment. 영속성 컨텍스트로 만들 DB 테이블 정의 -->
+            <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/menudb"/>
+            <property name="jakarta.persistence.jdbc.user" value="ohgiraffers"/>
+            <property name="jakarta.persistence.jdbc.password" value="ohgiraffers"/>
+            <!-- comment. JPA 내부적으로 동작하는 SQL 문을 보기 위한 설정 추가 -->
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>
