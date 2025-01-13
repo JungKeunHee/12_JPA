@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>전체 메뉴 조회</title>
+</head>
+<body>
+<h1> 메뉴 전체 조회 </h1>
+
+<table>
+  <tr>
+    <th>메뉴번호</th>
+    <th>메뉴이름</th>
+    <th>메뉴가격</th>
+    <th>카테고리번호</th>
+    <th>판매상태</th>
+  </tr>
+  <tr th:each="result : ${menus}">
+    <td th:text="${result.getMenuCode()}"></td>
+    <td th:text="${result.getMenuName()}"></td>
+    <td th:text="${result.getMenuPrice()}"></td>
+    <td th:text="${result.getCategoryCode()}"></td>
+    <td th:text="${result.getOrderableStatus()}"></td>
+  </tr>
+</table>
+
+<div id="paging">
+  <!-- 맨 앞 페이지 이동하는 버튼 -->
+  <button th:onclick="'location.href=\'/menu/list?page=' + ${paging.startPage} + '\''">⬅️</button>
+
+  <!-- 이전 페이지 이동하는 버튼 -->
+  <button th:onclick="'location.href=\'/menu/list?page=' + ${paging.currentPage - 1} + '\''" th:disabled="${menus.first}">↩️</button>
+
+  <!-- 숫자 페이지 버튼 -->
+  <th:block th:each="page : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+    <button
+            th:onclick="'location.href=\'/menu/list?page=' + ${page} + '\''"
+            th:text="${page}"
+            th:disabled="${paging.currentPage eq page}">
+    </button>
+  </th:block>
+
+  <!-- 다음 페이지로 이동하는 버튼 -->
+  <button th:onclick="'location.href=\'/menu/list?page=' + ${paging.currentPage + 1} + '\''" th:disabled="${menus.last}">↪️</button>
+
+  <!-- 맨 뒤 페이지 이동하는 버튼 -->
+  <button th:onclick="'location.href=\'/menu/list?page=' + ${paging.endPage} + '\''">➡️</button>
+</div>
+
+</body>
+</html>

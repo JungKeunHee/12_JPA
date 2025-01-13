@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>상세페이지</title>
+</head>
+<body>
+    <h1>PathVariable 로 전달 받은 메뉴 상세 조회</h1>
+
+    <table>
+        <tr>
+            <th>메뉴번호</th>
+            <th>메뉴이름</th>
+            <th>메뉴가격</th>
+            <th>카테고리번호</th>
+            <th>판매상태</th>
+        </tr>
+        <tr>
+            <td th:text="${result.getMenuCode()}"></td>
+            <td th:text="${result.getMenuName()}"></td>
+            <td th:text="${result.getMenuPrice()}"></td>
+            <td th:text="${result.getCategoryCode()}"></td>
+            <td th:text="${result.getOrderableStatus()}"></td>
+        </tr>
+    </table>
+</body>
+</html>

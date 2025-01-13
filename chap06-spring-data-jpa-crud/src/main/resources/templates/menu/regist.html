@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>신규 메뉴 등록</title>
+</head>
+<body>
+<h1>신규 메뉴 등록</h1>
+<form action="/menu/regist" method="post">
+  <label>메뉴 이름 : </label>
+  <input type="text" name="menuName"><br>
+  <label>메뉴 가격 : </label>
+  <input type="number" name="menuPrice"><br>
+  <label>카테고리 : </label>
+  <select name="categoryCode" id="categoryCode"></select><br>
+  <label>판매 여부 : </label>
+  <select name="orderableStatus">
+    <option value="Y">가능</option>
+    <option value="N">불가능</option>
+  </select><br>
+  <input type="submit" value="등록하기">
+</form>
+<script>
+  // category 정보 담겨있음
+  fetch('/menu/category') // 아직은 js 객체가 아닌 형태만 js
+          .then(res => res.json()) // 형태만 js 인 녀석을 진짜 js 객체로 변환
+          .then(data => {
+
+            // html 요소 취득하기
+            const $categoryCode = document.getElementById("categoryCode");
+
+            // data 는 list 형태이기 때문에 반복문을 만들어준다.
+            for(let index in data) {
+              // 반복하는 만큼 option 태그 만들기
+              const $option = document.createElement("option");
+
+              $option.value = data[index].categoryCode;
+              $option.textContent = data[index].categoryName;
+              $categoryCode.appendChild($option);
+            }
+          })
+</script>
+</body>
+</html>
