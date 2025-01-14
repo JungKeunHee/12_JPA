@@ -87,4 +87,39 @@ public class MenuController {
         // return 구문이 view 지정하는 것이 아닌, Data 를 리턴한다.
         return menuService.findAllCategory();
     }
+
+    @PostMapping("/regist")
+    public String registMenu(@ModelAttribute MenuDTO newMenu){
+
+        System.out.println("view 에서 전달받은 newMenu = " + newMenu);
+
+        menuService.registNewMenu(newMenu);
+
+        return "redirect:/menu/list";
+    }
+
+    @GetMapping("/modify")
+    public void modifyPage() {}
+
+    @PostMapping("/modify")
+    public String modifyMenu(@ModelAttribute MenuDTO modifyMenu) {
+
+        System.out.println("수정할 메뉴 정보 객체 modifyMenu = " + modifyMenu);
+
+        menuService.modifyMenu(modifyMenu);
+
+        return "redirect:/menu/" + modifyMenu.getMenuCode();
+    }
+
+    @GetMapping("/delete")
+    public void deletePage() {}
+
+    @PostMapping("/delete")
+    public String deleteMenu(@RequestParam int menuCode) {
+
+        menuService.deleteMenu(menuCode);
+
+        return "redirect:/menu/list";
+    }
+
 }

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -84,5 +85,57 @@ public class MenuService {
         return categoryList.stream()
                 .map(category -> modelMapper.map(category, CategoryDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    // DML 구문이기 때문에 @Transaction
+    @Transactional
+    public void registNewMenu(MenuDTO newMenu) {
+
+        // 지금까지는 Entity 를 DTO 로 변환했다면
+        // DML 구문에서는 DTO 타입을 Entity 로 변환을 해야
+        // Persistence Context == JPA 가 관리를 해준다.
+        menuRepository.save(modelMapper.map(newMenu, Menu.class));
+
+    }
+
+    @Transactional
+    public void modifyMenu(MenuDTO modifyMenu) {
+
+        /* update 는 엔티틸ㄹ 특정해서 필드의 값을 변경해주면 된다. */
+        /* JPA 는 변경감지 기능이 있다.
+        *   따라서 하나의 엔티리를 특정해서 필드 값을 변경하면
+        *   변경된 값으로 flush (반영) 을 해준다.
+        * */
+
+        // 엔티티 찾기(특정)
+        Menu foundMenu = menuRepository.findById(modifyMenu.getMenuCode()).orElseThrow(IllegalArgumentException::new); // 잘못된 파라미터가 넘겨왔을 때 예외처리 필수
+
+        System.out.println("특정된 메뉴 foundMenu = " + foundMenu);
+
+        /* 1. Setter 를 통해 update 기능 - (지양한다.) */
+//        foundMenu.setMenuName(modifyMenu.getMenuName());
+//
+//        System.out.println("setter 사용 후 foundMenu = " + foundMenu);
+
+        /* 2. @Builder 를 통해 update 기능 */
+//        foundMenu = foundMenu.toBuilder().menuName(modifyMenu.getMenuName()).build();
+//
+//        // build 를 통해서 foundMenu 새롭게 탄생 시켰으니
+//        // save 메소드를 통해 JPA 전달
+//
+//        menuRepository.save(foundMenu);
+//
+//        System.out.println("빌드를 통해 업데이트 값 확인 : " + foundMenu);
+
+        /* 3. Entity 내부에 Builder 패턴을 구현 */
+        foundMenu = foundMenu.menuName(modifyMenu.getMenuName()).builder();
+
+        menuRepository.save(foundMenu);
+    }
+
+    @Transactional
+    public void deleteMenu(int menuCode) {
+
+        menuRepository.deleteById(menuCode);
     }
 }
